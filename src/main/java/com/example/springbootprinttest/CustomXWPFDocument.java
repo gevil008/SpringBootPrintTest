@@ -40,14 +40,12 @@ public class CustomXWPFDocument extends XWPFDocument{
 	 * @param run
 	 *            段落
 	 */
-	public void createPicture(int id, int width, int height,
+	public void createPicture(String blipId, int id, int width, int height,
 							  org.apache.poi.xwpf.usermodel.XWPFRun run) {
 		final int EMU = 9525;
 		width *= EMU;
 		height *= EMU;
-		String blipId = super.getRelationId(super.getAllPictures().get(id));
-		CTInline inline = run.getCTR().addNewDrawing()
-				.addNewInline();
+		CTInline inline = run.getCTR().addNewDrawing().addNewInline();
 		String picXml = String.format(PICXML, id, blipId, width, height);
 		inline.addNewGraphic().addNewGraphicData();
 		XmlToken xmlToken = null;

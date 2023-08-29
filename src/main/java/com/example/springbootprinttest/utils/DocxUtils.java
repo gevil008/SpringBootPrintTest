@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -198,13 +197,10 @@ public class DocxUtils {
                         resVar = replaceBaseVarible(replace.replace("img_", ""), data, false);
                         ClassPathResource imageResource = new ClassPathResource(resVar);
                         try (InputStream inputStream = imageResource.getInputStream()) {
-                            byte[] ba = new byte[inputStream.available()];
-                            int len = inputStream.read(ba);
-                            ByteArrayInputStream byteInputStream = new ByteArrayInputStream(ba, 0, len);
                             //设置图片
-                            document.addPictureData(byteInputStream, XWPFDocument.PICTURE_TYPE_PNG);
+                            String blipId = document.addPictureData(inputStream, XWPFDocument.PICTURE_TYPE_PNG);
                             //创建一个word图片，并插入到文档中-->像素可改
-                            document.createPicture(document.getAllPictures().size() - 1, 100, 100, run);
+                            document.createPicture(blipId, document.getAllPictures().size() - 1, 100, 100, run);
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
